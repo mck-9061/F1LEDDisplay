@@ -134,7 +134,7 @@ def handle_control_message(message):
             print("Virtual safety car ending")
 
 
-openf1_base_url = "https://api.openf1.org/v1/"
+openf1_base_url = "http://127.0.0.1:8000/v1/"
 
 def get_race_control_previous():
     meetings = json.loads(requests.get(openf1_base_url + "meetings?year=2026&country_name=Italy", verify="/etc/ssl/certs/ca-certificates.crt").content)
@@ -184,7 +184,7 @@ def get_result_previous():
     allDrivers = []
 
     for driver_num in driver_order:
-        time.sleep(0.5)
+        #time.sleep(0.5)
         driver = json.loads(requests.get(openf1_base_url + f"drivers?driver_number={driver_num}&session_key={session_key}", verify="/etc/ssl/certs/ca-certificates.crt").content)[0]
         print(driver)
         allDrivers.append(driver)
