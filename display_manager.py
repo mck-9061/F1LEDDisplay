@@ -5,7 +5,7 @@ import openf1_interface
 options = RGBMatrixOptions()
 options.rows = 32
 options.cols = 64
-options.disable_hardware_pulsing = 1
+#options.disable_hardware_pulsing = 1
 
 matrix = RGBMatrix(options = options)
 canvas = matrix.CreateFrameCanvas()
@@ -95,4 +95,4 @@ while True:
 
     canvas = matrix.SwapOnVSync(canvas)
     display_drivers(drivers, colours)
-    time.sleep(2)
+    time.sleep(1)
