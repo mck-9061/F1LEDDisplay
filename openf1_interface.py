@@ -137,9 +137,9 @@ def handle_control_message(message):
 openf1_base_url = "https://api.openf1.org/v1/"
 
 def get_race_control_previous():
-    meetings = json.loads(requests.get(openf1_base_url + "meetings?year=2026&country_name=Italy").content)
+    meetings = json.loads(requests.get(openf1_base_url + "meetings?year=2026&country_name=Italy", verify="/etc/ssl/certs/ca-certificates.crt").content)
     meeting_key = meetings[0]["meeting_key"]
-    sessions = json.loads(requests.get(openf1_base_url + f"sessions?meeting_key={meeting_key}").content)
+    sessions = json.loads(requests.get(openf1_base_url + f"sessions?meeting_key={meeting_key}", verify="/etc/ssl/certs/ca-certificates.crt").content)
 
     race_session = None
     for session in sessions:
@@ -156,7 +156,7 @@ def get_race_control_previous():
 
         print(ftime)
 
-        control = json.loads(requests.get(openf1_base_url + f"race_control?session_key={session_key}&date<{ftime}").content)
+        control = json.loads(requests.get(openf1_base_url + f"race_control?session_key={session_key}&date<{ftime}", verify="/etc/ssl/certs/ca-certificates.crt").content)
 
         for message in control:
             if message not in all_received_control:
@@ -166,9 +166,9 @@ def get_race_control_previous():
 
 
 def get_result_previous():
-    meetings = json.loads(requests.get(openf1_base_url + "meetings?year=2026&country_name=Italy").content)
+    meetings = json.loads(requests.get(openf1_base_url + "meetings?year=2026&country_name=Italy", verify="/etc/ssl/certs/ca-certificates.crt").content)
     meeting_key = meetings[0]["meeting_key"]
-    sessions = json.loads(requests.get(openf1_base_url + f"sessions?meeting_key={meeting_key}").content)
+    sessions = json.loads(requests.get(openf1_base_url + f"sessions?meeting_key={meeting_key}", verify="/etc/ssl/certs/ca-certificates.crt").content)
 
     race_session = None
     for session in sessions:
@@ -177,16 +177,16 @@ def get_result_previous():
 
     session_key = race_session["session_key"]
 
-    driver_order = [driver["driver_number"] for driver in json.loads(requests.get(openf1_base_url + f"session_result?session_key={session_key}").content)]
+    driver_order = [driver["driver_number"] for driver in json.loads(requests.get(openf1_base_url + f"session_result?session_key={session_key}", verify="/etc/ssl/certs/ca-certificates.crt").content)]
     print(driver_order)
     print("Getting driver data...")
 
     allDrivers = []
 
     for driver_num in driver_order:
-        driver = json.loads(requests.get(openf1_base_url + f"drivers?driver_number={driver_num}&session_key={session_key}").content)
-        print(driver)
         time.sleep(0.5)
+        driver = json.loads(requests.get(openf1_base_url + f"drivers?driver_number={driver_num}&session_key={session_key}", verify="/etc/ssl/certs/ca-certificates.crt").content)
+        print(driver)
         allDrivers.append(driver)
 
     return allDrivers
