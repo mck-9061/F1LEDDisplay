@@ -1,4 +1,5 @@
 from rgbmatrix import RGBMatrix, RGBMatrixOptions, graphics
+import time
 
 options = RGBMatrixOptions()
 options.rows = 32
@@ -42,6 +43,8 @@ def display_drivers(drivers):
     font = graphics.Font()
 
     for driver in drivers:
+        textColour = graphics.Color(0, 255, 0)
+
         if i == 0:
             font.LoadFont("./fonts/7x7-7.bdf")
         if i == 1:
@@ -53,8 +56,7 @@ def display_drivers(drivers):
         else:
             font.LoadFont("./fonts/3x4-4.bdf")
 
-        textColour = graphics.Color(0, 255, 0)
-
+        time.sleep(0.05)
         graphics.DrawText(canvas, font, x, y, textColour, driver)
 
         i += 1
