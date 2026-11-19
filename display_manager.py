@@ -1,5 +1,6 @@
 from rgbmatrix import RGBMatrix, RGBMatrixOptions, graphics
 import time
+import openf1_interface
 
 options = RGBMatrixOptions()
 options.rows = 32
@@ -9,32 +10,32 @@ options.disable_hardware_pulsing = 1
 matrix = RGBMatrix(options = options)
 canvas = matrix.CreateFrameCanvas()
 
-drivers = [
-    "ANT",
-    "VER",
-    "RUS",
-    "HAM",
-    "LEC",
-    "NOR",
-    "PIA",
-    "HAD",
-    "LAW",
-    "GAS",
-    "LIN",
-    "COL",
-    "BEA",
-    "BOR",
-    "HUL",
-    "OCO",
-    "ALO",
-    "SAI",
-    "ALB",
-    "TSU",
-    "HIR",
-    "STR"
-]
+# drivers = [
+#     "ANT",
+#     "VER",
+#     "RUS",
+#     "HAM",
+#     "LEC",
+#     "NOR",
+#     "PIA",
+#     "HAD",
+#     "LAW",
+#     "GAS",
+#     "LIN",
+#     "COL",
+#     "BEA",
+#     "BOR",
+#     "HUL",
+#     "OCO",
+#     "ALO",
+#     "SAI",
+#     "ALB",
+#     "TSU",
+#     "HIR",
+#     "STR"
+# ]
 
-def display_drivers(drivers):
+def display_drivers(drivers, colours):
     i = 0
 
     x = 1
@@ -43,7 +44,12 @@ def display_drivers(drivers):
     font = graphics.Font()
 
     for driver in drivers:
-        textColour = graphics.Color(0, 255, 0)
+        colour = colours[i]
+        r = int("0x" + colour[0:2])
+        g = int("0x" + colour[2:4])
+        b = int("0x" + colour[4:6])
+
+        textColour = graphics.Color(r, g, b)
 
         if i == 0:
             font.LoadFont("./fonts/7x7-7.bdf")
@@ -74,6 +80,10 @@ def display_drivers(drivers):
                 x += 13
 
 
+d = openf1_interface.get_result_previous()
+drivers = [driver["name_acronym"] for driver in d]
+colours = [driver["team_colour"] for driver in d]
+
 while True:
-    display_drivers(drivers)
+    display_drivers(drivers, colours)
     canvas = matrix.SwapOnVSync(canvas)
