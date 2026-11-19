@@ -9,9 +9,9 @@ matrix = RGBMatrix(options = options)
 canvas = matrix.CreateFrameCanvas()
 
 font = graphics.Font()
-font.LoadFont("./fonts/3x4.bdf")
+font.LoadFont("./fonts/3x4-4.bdf")
 textColour = graphics.Colour(0, 255, 0)
 
 while True:
-    canvas.Clear()
+    matrix.Fill(255, 0, 0)
     graphics.DrawText(canvas, font, 0, 10, textColour, "HELLO WORLD")
