@@ -204,7 +204,7 @@ def get_current_driver_data():
     return all_drivers
 
 def get_latest_positions():
-    aa = json.loads(requests.get(openf1_base_url + f"position?session_key=latest").content)
+    aa = json.loads(requests.get(openf1_base_url + f"position?session_key=latest", verify="/etc/ssl/certs/ca-certificates.crt").content)
     print(json.dumps(aa, indent=2))
 
     currentPositions = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
