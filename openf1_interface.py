@@ -185,7 +185,7 @@ def get_result_previous():
 
     for driver_num in driver_order:
         time.sleep(0.5)
-        driver = json.loads(requests.get(openf1_base_url + f"drivers?driver_number={driver_num}&session_key={session_key}", verify="/etc/ssl/certs/ca-certificates.crt").content)
+        driver = json.loads(requests.get(openf1_base_url + f"drivers?driver_number={driver_num}&session_key={session_key}", verify="/etc/ssl/certs/ca-certificates.crt").content)[0]
         print(driver)
         allDrivers.append(driver)
 
