@@ -80,10 +80,19 @@ def display_drivers(drivers, colours):
                 x += 13
 
 
-d = openf1_interface.get_result_previous()
-drivers = [driver["name_acronym"] for driver in d]
-colours = [driver["team_colour"] for driver in d]
+d = openf1_interface.get_current_driver_data()
 
 while True:
-    display_drivers(drivers, colours)
+    order = openf1_interface.get_latest_positions()
+    drivers = []
+    colours = []
+
+    for driver_num in order:
+        for driver in d:
+            if driver["driver_number"] == driver_num:
+                drivers.append(driver["name_acronym"])
+                colours.append(driver["team_colour"])
+
     canvas = matrix.SwapOnVSync(canvas)
+    display_drivers(drivers, colours)
+    time.sleep(2)

@@ -164,7 +164,6 @@ def get_race_control_previous():
 
         sleep.sleep(5)
 
-
 def get_result_previous():
     meetings = json.loads(requests.get(openf1_base_url + "meetings?year=2026&country_name=Brazil", verify="/etc/ssl/certs/ca-certificates.crt").content)
     meeting_key = meetings[0]["meeting_key"]
@@ -191,6 +190,23 @@ def get_result_previous():
 
     return allDrivers
 
+def get_current_driver_data():
+    all_drivers = []
+    found_numbers = []
+
+    drivers = json.loads(requests.get(openf1_base_url + f"drivers?session_key=latest", verify="/etc/ssl/certs/ca-certificates.crt").content)
+
+    for driver in drivers:
+        if driver["driver_number"] not in found_numbers:
+            found_numbers.append(driver["driver_number"])
+            all_drivers.append(driver)
+
+    return all_drivers
+
+def get_latest_positions():
+    driver_order = [driver["driver_number"] for driver in json.loads(requests.get(openf1_base_url + f"position?session_key=latest", verify="/etc/ssl/certs/ca-certificates.crt").content)]
+
+    return driver_order
 
 # if __name__ == '__main__':
 #     get_result_previous()
