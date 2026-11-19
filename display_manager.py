@@ -40,14 +40,18 @@ def display_drivers(drivers):
     y = 8
 
     font = graphics.Font()
-    font.LoadFont("./fonts/3x4-4.bdf")
 
     for driver in drivers:
-        if i == 0: font.LoadFont("./fonts/7x7-7.bdf")
-        if i == 1: font.LoadFont("./fonts/5x6-6.bdf")
-        if i == 2: font.LoadFont("./fonts/4x5-5.bdf")
-        if i == 3: font.LoadFont("./fonts/4x4-4.bdf")
-        else: font.LoadFont("./fonts/3x4-4.bdf")
+        if i == 0:
+            font.LoadFont("./fonts/7x7-7.bdf")
+        if i == 1:
+            font.LoadFont("./fonts/5x6-6.bdf")
+        if i == 2:
+            font.LoadFont("./fonts/4x5-5.bdf")
+        if i == 3:
+            font.LoadFont("./fonts/4x4-4.bdf")
+        else:
+            font.LoadFont("./fonts/3x4-4.bdf")
 
         textColour = graphics.Color(0, 255, 0)
 
