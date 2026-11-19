@@ -15,3 +15,4 @@ background = graphics.Color(255, 0, 0)
 
 while True:
     graphics.DrawText(canvas, font, 0, 10, textColour, background, "HELLO WORLD")
+    canvas = matrix.SwapOnVSync(canvas)
