@@ -166,7 +166,7 @@ def get_race_control_previous():
 
 
 def get_result_previous():
-    meetings = json.loads(requests.get(openf1_base_url + "meetings?year=2026&country_name=Monaco", verify="/etc/ssl/certs/ca-certificates.crt").content)
+    meetings = json.loads(requests.get(openf1_base_url + "meetings?year=2026&country_name=Brazil", verify="/etc/ssl/certs/ca-certificates.crt").content)
     meeting_key = meetings[0]["meeting_key"]
     sessions = json.loads(requests.get(openf1_base_url + f"sessions?meeting_key={meeting_key}", verify="/etc/ssl/certs/ca-certificates.crt").content)
 
