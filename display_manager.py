@@ -47,16 +47,15 @@ def display_drivers(drivers):
 
         if i == 0:
             font.LoadFont("./fonts/7x7-7.bdf")
-        if i == 1:
+        elif i == 1:
             font.LoadFont("./fonts/5x6-6.bdf")
-        if i == 2:
+        elif i == 2:
             font.LoadFont("./fonts/4x5-5.bdf")
-        if i == 3:
+        elif i == 3:
             font.LoadFont("./fonts/4x4-4.bdf")
         else:
             font.LoadFont("./fonts/3x4-4.bdf")
 
-        time.sleep(0.05)
         graphics.DrawText(canvas, font, x, y, textColour, driver)
 
         i += 1
