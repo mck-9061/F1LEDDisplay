@@ -9,8 +9,8 @@ matrix = RGBMatrix(options = options)
 canvas = matrix.CreateFrameCanvas()
 
 font = graphics.Font()
-font.LoadFont("./fonts/3x4-4.bdf")
-textColour = graphics.Colour(0, 255, 0)
+font.LoadFont("./fonts/5x7.bdf")
+textColour = graphics.Color(0, 255, 0)
 
 while True:
     matrix.Fill(255, 0, 0)
