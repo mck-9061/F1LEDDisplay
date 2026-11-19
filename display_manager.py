@@ -45,9 +45,9 @@ def display_drivers(drivers, colours):
 
     for driver in drivers:
         colour = colours[i]
-        r = int("0x" + colour[0:2])
-        g = int("0x" + colour[2:4])
-        b = int("0x" + colour[4:6])
+        r = int(colour[0:2], 16)
+        g = int(colour[2:4], 16)
+        b = int(colour[4:6], 16)
 
         textColour = graphics.Color(r, g, b)
 
