@@ -204,9 +204,15 @@ def get_current_driver_data():
     return all_drivers
 
 def get_latest_positions():
-    driver_order = [driver["driver_number"] for driver in json.loads(requests.get(openf1_base_url + f"position?session_key=latest", verify="/etc/ssl/certs/ca-certificates.crt").content)]
+    aa = json.loads(requests.get(openf1_base_url + f"position?session_key=latest").content)
+    print(json.dumps(aa, indent=2))
 
-    return driver_order
+    currentPositions = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
-# if __name__ == '__main__':
-#     get_result_previous()
+    for event in aa:
+        currentPositions[event["position"] - 1] = event["driver_number"]
+
+    return currentPositions
+
+if __name__ == '__main__':
+    print(get_latest_positions())
