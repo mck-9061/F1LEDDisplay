@@ -1,4 +1,5 @@
 import datetime
+from datetime import timezone
 
 from rgbmatrix import RGBMatrix, RGBMatrixOptions, graphics
 import time
@@ -93,7 +94,7 @@ print(d)
 t = openf1_interface.get_next_session_time()
 
 while not d:
-    delta = t - datetime.datetime.now()
+    delta = t - datetime.datetime.now(timezone.utc)
     f = format_timedelta(delta)
 
     canvas = matrix.SwapOnVSync(canvas)
