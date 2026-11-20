@@ -1,5 +1,5 @@
 import time
-from datetime import timedelta
+from datetime import timedelta, timezone
 
 import requests
 import json
@@ -194,7 +194,7 @@ def get_latest_session_with_data():
     # return meeting and session ID
     aa = json.loads(requests.get(openf1_base_url + f"sessions?year=2026",verify="/etc/ssl/certs/ca-certificates.crt").content)
 
-    current_time = datetime.datetime.now()
+    current_time = datetime.datetime.now(timezone.utc)
     s = None
     delta = timedelta(hours=99999999)
 
