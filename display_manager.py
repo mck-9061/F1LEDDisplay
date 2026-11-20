@@ -47,6 +47,25 @@ def draw_border(r, g, b):
         canvas.SetPixel(0, y, r, g, b)
         canvas.SetPixel(63, y, r, g, b)
 
+def draw_chequered_border():
+    black = (int(time.time()) % 2 == 0)
+
+    for x in range(0, 64):
+        if not black:
+            canvas.SetPixel(x, 0, 255, 255, 255)
+            canvas.SetPixel(x, 31, 255, 255, 255)
+
+        if x % 4 == 0:
+            black = not black
+
+    for y in range(0, 32):
+        if not black:
+            canvas.SetPixel(0, y, 255, 255, 255)
+            canvas.SetPixel(63, y, 255, 255, 255)
+
+        if y % 4 == 0:
+            black = not black
+
 def display_drivers(drivers, colours):
     i = 0
 
@@ -114,7 +133,8 @@ while not d:
     font.LoadFont("./fonts/5x7.bdf")
 
     graphics.DrawText(canvas, font, 5, 19, textColour, f)
-    draw_border(255, 255, 255)
+    #draw_border(255, 255, 255)
+    draw_chequered_border()
 
     time.sleep(0.2)
 
