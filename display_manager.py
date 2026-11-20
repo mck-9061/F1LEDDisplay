@@ -79,9 +79,33 @@ def display_drivers(drivers, colours):
                 y = 5
                 x += 13
 
+def format_timedelta(td):
+    hours, remainder = divmod(td.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+
+    return f"{td.days:02d}:{hours:02d}:{minutes:02d}:{seconds:02d}"
+
 
 d = openf1_interface.get_current_driver_data()
 print(d)
+
+while not d:
+    delta = openf1_interface.get_time_until_next_session()
+    f = format_timedelta(delta)
+
+    canvas = matrix.SwapOnVSync(canvas)
+    canvas.Clear()
+
+    font = graphics.Font()
+    textColour = graphics.Color(255, 0, 0)
+    font.LoadFont("./fonts/5x7.bdf")
+
+    graphics.DrawText(canvas, font, 0, 19, textColour, f)
+
+    time.sleep(1)
+
+    d = openf1_interface.get_current_driver_data()
+
 
 while True:
     order = openf1_interface.get_latest_positions()

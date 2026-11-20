@@ -208,6 +208,22 @@ def get_latest_session_with_data():
 
     return s["meeting_key"], s["session_key"]
 
+def get_time_until_next_session():
+    aa = json.loads(
+        requests.get(openf1_base_url + f"sessions?year=2026", verify="/etc/ssl/certs/ca-certificates.crt").content)
+
+    current_time = datetime.datetime.now(timezone.utc)
+    s = None
+    delta = timedelta(hours=99999999)
+
+    for session in aa:
+        start = datetime.datetime.fromisoformat(session["date_start"])
+
+        if start - current_time < delta:
+            s = session
+            delta = start - current_time
+
+    return delta
 
 
 def get_current_driver_data():
