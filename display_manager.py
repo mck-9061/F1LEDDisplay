@@ -1,4 +1,5 @@
 import datetime
+import threading
 from datetime import timezone
 
 from rgbmatrix import RGBMatrix, RGBMatrixOptions, graphics
@@ -116,10 +117,18 @@ def format_timedelta(td):
 
     return f"{td.days:02d}:{hours:02d}:{minutes:02d}:{seconds:02d}"
 
+d = []
+def get_driver_data_initial():
+    global d
 
-d = openf1_interface.get_current_driver_data()
-print(d)
+    while not d:
+        d = openf1_interface.get_current_driver_data()
+        time.sleep(0.5)
+
 t = openf1_interface.get_next_session_time()
+
+th = threading.Thread(target=get_driver_data_initial)
+th.start()
 
 while not d:
     delta = t - datetime.datetime.now(timezone.utc)
@@ -135,10 +144,6 @@ while not d:
     graphics.DrawText(canvas, font, 5, 19, textColour, f)
     #draw_border(255, 255, 255)
     draw_chequered_border()
-
-    time.sleep(0.2)
-
-    d = openf1_interface.get_current_driver_data()
 
 
 while True:
