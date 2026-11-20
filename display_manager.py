@@ -81,9 +81,11 @@ def display_drivers(drivers, colours):
 
 
 d = openf1_interface.get_current_driver_data()
+print(d)
 
 while True:
     order = openf1_interface.get_latest_positions()
+    print(order)
     drivers = []
     colours = []
 
