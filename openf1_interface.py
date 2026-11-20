@@ -134,7 +134,7 @@ def handle_control_message(message):
             print("Virtual safety car ending")
 
 
-openf1_base_url = "http://127.0.0.1:8000/v1/"
+openf1_base_url = "http://api.openf1.org/v1/"
 
 def get_race_control_previous():
     meetings = json.loads(requests.get(openf1_base_url + "meetings?year=2026&country_name=Italy", verify="/etc/ssl/certs/ca-certificates.crt").content)
@@ -192,9 +192,22 @@ def get_result_previous():
 
 def get_latest_session_with_data():
     # return meeting and session ID
-    aa = json.loads(requests.get(openf1_base_url + f"drivers",verify="/etc/ssl/certs/ca-certificates.crt").content)
-    last_driver = aa[-1]
-    return last_driver["meeting_key"], last_driver["session_key"]
+    aa = json.loads(requests.get(openf1_base_url + f"sessions?year=2026",verify="/etc/ssl/certs/ca-certificates.crt").content)
+
+    current_time = datetime.datetime.now()
+    s = None
+    delta = timedelta(hours=99999999)
+
+    for session in aa:
+        start = datetime.datetime.fromisoformat(session["date_start"])
+
+        # Use the session with the start time closest to the current time
+        if abs(current_time - start) < delta:
+            s = session
+            delta = abs(current_time - start)
+
+    return s["meeting_key"], s["session_key"]
+
 
 
 def get_current_driver_data():
