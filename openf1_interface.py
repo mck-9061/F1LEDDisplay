@@ -213,14 +213,12 @@ def get_time_until_next_session():
         requests.get(openf1_base_url + f"sessions?year=2026", verify="/etc/ssl/certs/ca-certificates.crt").content)
 
     current_time = datetime.datetime.now(timezone.utc)
-    s = None
     delta = timedelta(hours=99999999)
 
     for session in aa:
         start = datetime.datetime.fromisoformat(session["date_start"])
 
-        if start - current_time < delta:
-            s = session
+        if start >= current_time and start - current_time < delta:
             delta = start - current_time
 
     return delta

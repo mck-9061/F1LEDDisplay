@@ -102,7 +102,7 @@ while not d:
 
     graphics.DrawText(canvas, font, 0, 19, textColour, f)
 
-    time.sleep(1)
+    time.sleep(0.3)
 
     d = openf1_interface.get_current_driver_data()
 
