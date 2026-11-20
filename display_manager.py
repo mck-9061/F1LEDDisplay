@@ -96,5 +96,6 @@ while True:
                 colours.append(driver["team_colour"])
 
     canvas = matrix.SwapOnVSync(canvas)
+    canvas.Clear()
     display_drivers(drivers, colours)
     time.sleep(1)
