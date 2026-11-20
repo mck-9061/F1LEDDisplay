@@ -38,6 +38,15 @@ canvas = matrix.CreateFrameCanvas()
 #     "STR"
 # ]
 
+def draw_border(r, g, b):
+    for x in range(0, 64):
+        canvas.SetPixel(x, 0, r, g, b)
+        canvas.SetPixel(x, 31, r, g, b)
+
+    for y in range(0, 32):
+        canvas.SetPixel(0, y, r, g, b)
+        canvas.SetPixel(63, y, r, g, b)
+
 def display_drivers(drivers, colours):
     i = 0
 
@@ -105,6 +114,7 @@ while not d:
     font.LoadFont("./fonts/5x7.bdf")
 
     graphics.DrawText(canvas, font, 5, 19, textColour, f)
+    draw_border(255, 255, 255)
 
     time.sleep(0.2)
 
@@ -112,6 +122,7 @@ while not d:
 
 
 while True:
+    openf1_interface.get_race_control()
     order = openf1_interface.get_latest_positions()
     print(order)
     drivers = []
@@ -126,4 +137,4 @@ while True:
     canvas = matrix.SwapOnVSync(canvas)
     canvas.Clear()
     display_drivers(drivers, colours)
-    time.sleep(1)
+    time.sleep(0.2)

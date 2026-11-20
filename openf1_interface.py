@@ -18,6 +18,8 @@ red_flag = False
 chequered_flag = False
 status = ""
 
+openf1_base_url = "http://127.0.0.1:8000/v1/"
+
 def handle_control_message(message):
     global rain_risk
     global overtake
@@ -133,36 +135,14 @@ def handle_control_message(message):
             virtual_safety_car = False
             print("Virtual safety car ending")
 
+def get_race_control():
+    meeting_key, session_key = get_latest_session_with_data()
 
-openf1_base_url = "http://127.0.0.1:8000/v1/"
+    control = json.loads(requests.get(openf1_base_url + f"race_control?session_key={session_key}", verify="/etc/ssl/certs/ca-certificates.crt").content)
 
-def get_race_control_previous():
-    meetings = json.loads(requests.get(openf1_base_url + "meetings?year=2026&country_name=Italy", verify="/etc/ssl/certs/ca-certificates.crt").content)
-    meeting_key = meetings[0]["meeting_key"]
-    sessions = json.loads(requests.get(openf1_base_url + f"sessions?meeting_key={meeting_key}", verify="/etc/ssl/certs/ca-certificates.crt").content)
-
-    race_session = None
-    for session in sessions:
-        if session["session_type"] == "Race":
-            race_session = session
-
-    session_key = race_session["session_key"]
-
-    current = datetime.datetime(2026, 9, 6, 12, 19, 26)
-
-    while True:
-        current = current + timedelta(seconds=30)
-        ftime = current.strftime("%Y-%m-%dT%H:%M:%S+00:00")
-
-        print(ftime)
-
-        control = json.loads(requests.get(openf1_base_url + f"race_control?session_key={session_key}&date<{ftime}", verify="/etc/ssl/certs/ca-certificates.crt").content)
-
-        for message in control:
-            if message not in all_received_control:
-                handle_control_message(message)
-
-        sleep.sleep(5)
+    for message in control:
+        if message not in all_received_control:
+            handle_control_message(message)
 
 def get_result_previous():
     meetings = json.loads(requests.get(openf1_base_url + "meetings?year=2026&country_name=Brazil", verify="/etc/ssl/certs/ca-certificates.crt").content)
