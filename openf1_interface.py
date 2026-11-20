@@ -190,11 +190,21 @@ def get_result_previous():
 
     return allDrivers
 
+def get_latest_session_with_data():
+    # return meeting and session ID
+    aa = json.loads(requests.get(openf1_base_url + f"drivers",verify="/etc/ssl/certs/ca-certificates.crt").content)
+    last_driver = aa[-1]
+    return last_driver["meeting_key"], last_driver["session_key"]
+
+
 def get_current_driver_data():
     all_drivers = []
     found_numbers = []
 
-    drivers = json.loads(requests.get(openf1_base_url + f"drivers?session_key=latest", verify="/etc/ssl/certs/ca-certificates.crt").content)
+    meeting, session = get_latest_session_with_data()
+    print(f"Meeting {meeting}, session {session}")
+
+    drivers = json.loads(requests.get(openf1_base_url + f"drivers?session_key={session}", verify="/etc/ssl/certs/ca-certificates.crt").content)
 
     for driver in drivers:
         if driver["driver_number"] not in found_numbers:
@@ -204,7 +214,10 @@ def get_current_driver_data():
     return all_drivers
 
 def get_latest_positions():
-    aa = json.loads(requests.get(openf1_base_url + f"position?session_key=latest", verify="/etc/ssl/certs/ca-certificates.crt").content)
+    meeting, session = get_latest_session_with_data()
+    print(f"Meeting {meeting}, session {session}")
+
+    aa = json.loads(requests.get(openf1_base_url + f"position?session_key={session}", verify="/etc/ssl/certs/ca-certificates.crt").content)
     #print(json.dumps(aa, indent=2))
 
     currentPositions = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
