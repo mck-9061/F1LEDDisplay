@@ -48,21 +48,21 @@ def draw_border(r, g, b):
         canvas.SetPixel(0, y, r, g, b)
         canvas.SetPixel(63, y, r, g, b)
 
-def draw_chequered_border():
+def draw_chequered_border(r, g, b):
     black = (int(time.time()) % 2 == 0)
 
     for x in range(0, 64):
         if not black:
-            canvas.SetPixel(x, 0, 255, 255, 255)
-            canvas.SetPixel(x, 31, 255, 255, 255)
+            canvas.SetPixel(x, 0, r, g, b)
+            canvas.SetPixel(x, 31, r, g, b)
 
         if x % 4 == 0:
             black = not black
 
     for y in range(0, 32):
         if not black:
-            canvas.SetPixel(0, y, 255, 255, 255)
-            canvas.SetPixel(63, y, 255, 255, 255)
+            canvas.SetPixel(0, y, r, g, b)
+            canvas.SetPixel(63, y, r, g, b)
 
         if y % 4 == 0:
             black = not black
@@ -142,8 +142,7 @@ while not d:
     font.LoadFont("./fonts/5x7.bdf")
 
     graphics.DrawText(canvas, font, 5, 19, textColour, f)
-    #draw_border(255, 255, 255)
-    draw_chequered_border()
+    draw_border(255, 255, 255)
 
 
 while True:
@@ -161,5 +160,19 @@ while True:
 
     canvas = matrix.SwapOnVSync(canvas)
     canvas.Clear()
+
+    if openf1_interface.red_flag:
+        draw_border(0, 0, 255)
+    elif openf1_interface.chequered_flag:
+        draw_chequered_border(255, 255, 255)
+    elif openf1_interface.safety_car:
+        draw_chequered_border(247, 104, 6)
+    elif openf1_interface.virtual_safety_car:
+        draw_chequered_border(255, 255, 0)
+    elif openf1_interface.yellow_sectors or openf1_interface.double_yellow_sectors:
+        draw_border(255, 255, 0)
+    else:
+        draw_border(0, 255, 0)
+
     display_drivers(drivers, colours)
     time.sleep(0.2)

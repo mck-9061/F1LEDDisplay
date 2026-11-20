@@ -125,15 +125,21 @@ def handle_control_message(message):
     if category == "SafetyCar":
         if message == "SAFETY CAR DEPLOYED":
             safety_car = True
+            virtual_safety_car = False
             print("Safety car deployed")
 
         if message == "VSC DEPLOYED":
             virtual_safety_car = True
+            safety_car = False
             print("Virtual safety car deployed")
 
         if message == "VSC ENDING":
             virtual_safety_car = False
             print("Virtual safety car ending")
+
+        else:
+            safety_car = False
+            print("Safety car in this lap")
 
 def get_race_control():
     meeting_key, session_key = get_latest_session_with_data()
