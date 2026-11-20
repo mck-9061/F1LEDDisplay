@@ -1,3 +1,5 @@
+import datetime
+
 from rgbmatrix import RGBMatrix, RGBMatrixOptions, graphics
 import time
 import openf1_interface
@@ -88,9 +90,10 @@ def format_timedelta(td):
 
 d = openf1_interface.get_current_driver_data()
 print(d)
+t = openf1_interface.get_next_session_time()
 
 while not d:
-    delta = openf1_interface.get_time_until_next_session()
+    delta = t - datetime.datetime.now()
     f = format_timedelta(delta)
 
     canvas = matrix.SwapOnVSync(canvas)
@@ -100,9 +103,9 @@ while not d:
     textColour = graphics.Color(255, 0, 0)
     font.LoadFont("./fonts/5x7.bdf")
 
-    graphics.DrawText(canvas, font, 0, 19, textColour, f)
+    graphics.DrawText(canvas, font, 5, 19, textColour, f)
 
-    time.sleep(0.3)
+    time.sleep(0.2)
 
     d = openf1_interface.get_current_driver_data()
 
