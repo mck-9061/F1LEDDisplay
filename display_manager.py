@@ -172,7 +172,7 @@ while True:
     elif openf1_interface.yellow_sectors or openf1_interface.double_yellow_sectors:
         draw_border(255, 255, 0)
     else:
-        draw_border(0, 255, 0)
+        draw_border(0, 30, 0)
 
     display_drivers(drivers, colours)
-    time.sleep(0.2)
+    time.sleep(0.5)
