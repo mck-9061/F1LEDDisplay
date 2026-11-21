@@ -160,8 +160,6 @@ def fetch_data():
 
         i = 0
         for driver_num in order:
-            i += 1
-
             driver_obj = {}
 
             for driver in d:
@@ -172,6 +170,7 @@ def fetch_data():
                     driver_obj["valid_at"] = datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
 
             updated_drivers.append(driver_obj)
+            i += 1
 
         time.sleep(0.5)
 
