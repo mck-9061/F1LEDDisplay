@@ -197,7 +197,7 @@ while True:
     # Construct drivers array
     new_drivers = []
     for driver in drivers:
-        if driver["valid_at"] <= datetime.datetime.now():
+        if driver["valid_at"] <= datetime.datetime.now(timezone.utc):
             current_order[driver["position"]] = driver["name"]
             current_colours[driver["position"]] = driver["colour"]
         else:
