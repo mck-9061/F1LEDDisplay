@@ -14,7 +14,7 @@ options.cols = 64
 matrix = RGBMatrix(options = options)
 canvas = matrix.CreateFrameCanvas()
 
-delay = 35
+delay = 42
 
 # drivers = [
 #     "ANT",
