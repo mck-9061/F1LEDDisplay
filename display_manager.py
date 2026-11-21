@@ -147,6 +147,7 @@ while not d:
     draw_border(255, 255, 255)
 
 drivers = []
+updated_drivers = []
 
 current_order = ["HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD"]
 current_colours = ["FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF"]
@@ -170,7 +171,7 @@ def fetch_data():
                     driver_obj["colour"] = driver["team_colour"]
                     driver_obj["valid_at"] = datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
 
-            drivers.append(driver_obj)
+            updated_drivers.append(driver_obj)
 
         time.sleep(0.5)
 
@@ -195,7 +196,9 @@ while True:
         draw_border(0, 30, 0)
 
     # Construct drivers array
-    new_drivers = []
+    new_drivers = [a for a in updated_drivers]
+    updated_drivers = []
+
     for driver in drivers:
         if driver["valid_at"] <= datetime.datetime.now(timezone.utc):
             current_order[driver["position"]] = driver["name"]
