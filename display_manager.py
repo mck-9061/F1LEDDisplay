@@ -14,6 +14,8 @@ options.cols = 64
 matrix = RGBMatrix(options = options)
 canvas = matrix.CreateFrameCanvas()
 
+delay = 35
+
 # drivers = [
 #     "ANT",
 #     "VER",
@@ -75,8 +77,19 @@ def display_drivers(drivers, colours):
 
     font = graphics.Font()
 
-    for driver in drivers:
-        colour = colours[i]
+    for d in drivers:
+        driver = d["name"]
+        valid_at = d["valid_at"]
+
+        c = colours[i]
+        colour = c["colour"]
+
+        if valid_at <= datetime.datetime.now(timezone.utc):
+            drivers.remove(d)
+            colours.remove(c)
+        else:
+            continue
+
         r = int(colour[0:2], 16)
         g = int(colour[2:4], 16)
         b = int(colour[4:6], 16)
@@ -155,14 +168,26 @@ def fetch_data():
         openf1_interface.get_race_control()
         order = openf1_interface.get_latest_positions()
         print(order)
-        drivers = []
-        colours = []
 
         for driver_num in order:
+            driver_obj = {
+
+            }
+
+            col_obj = {
+
+            }
+
             for driver in d:
                 if driver["driver_number"] == driver_num:
-                    drivers.append(driver["name_acronym"])
-                    colours.append(driver["team_colour"])
+                    driver_obj["name"] = driver["name_acronym"]
+                    col_obj["colour"] = driver["team_colour"]
+
+                    driver_obj["valid_at"] = datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
+                    col_obj["valid_at"] = datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
+
+            drivers.append(driver_obj)
+            colours.append(col_obj)
 
         time.sleep(0.5)
 
