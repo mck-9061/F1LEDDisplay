@@ -77,19 +77,8 @@ def display_drivers(drivers, colours):
 
     font = graphics.Font()
 
-    for d in drivers:
-        driver = d["name"]
-        valid_at = d["valid_at"]
-
-        c = colours[i]
-        colour = c["colour"]
-
-        if valid_at <= datetime.datetime.now(timezone.utc):
-            drivers.remove(d)
-            colours.remove(c)
-        else:
-            continue
-
+    for driver in drivers:
+        colour = colours[i]
         r = int(colour[0:2], 16)
         g = int(colour[2:4], 16)
         b = int(colour[4:6], 16)
@@ -158,36 +147,30 @@ while not d:
     draw_border(255, 255, 255)
 
 drivers = []
-colours = []
+
+current_order = ["HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD"]
+current_colours = ["FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF"]
 
 def fetch_data():
-    global drivers
-    global colours
-
     while True:
         openf1_interface.get_race_control()
         order = openf1_interface.get_latest_positions()
         print(order)
 
+        i = 0
         for driver_num in order:
-            driver_obj = {
+            i += 1
 
-            }
-
-            col_obj = {
-
-            }
+            driver_obj = {}
 
             for driver in d:
                 if driver["driver_number"] == driver_num:
                     driver_obj["name"] = driver["name_acronym"]
-                    col_obj["colour"] = driver["team_colour"]
-
+                    driver_obj["position"] = i
+                    driver_obj["colour"] = driver["team_colour"]
                     driver_obj["valid_at"] = datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
-                    col_obj["valid_at"] = datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
 
             drivers.append(driver_obj)
-            colours.append(col_obj)
 
         time.sleep(0.5)
 
@@ -211,4 +194,15 @@ while True:
     else:
         draw_border(0, 30, 0)
 
-    display_drivers(drivers, colours)
+    # Construct drivers array
+    new_drivers = []
+    for driver in drivers:
+        if driver["valid_at"] <= datetime.datetime.now():
+            current_order[driver["position"]] = driver["name"]
+            current_colours[driver["position"]] = driver["colour"]
+        else:
+            new_drivers.append(driver)
+
+    drivers = new_drivers
+
+    display_drivers(current_order, current_colours)
