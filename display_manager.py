@@ -144,20 +144,32 @@ while not d:
     graphics.DrawText(canvas, font, 5, 19, textColour, f)
     draw_border(255, 255, 255)
 
+drivers = []
+colours = []
+
+def fetch_data():
+    global drivers
+    global colours
+
+    while True:
+        openf1_interface.get_race_control()
+        order = openf1_interface.get_latest_positions()
+        print(order)
+        drivers = []
+        colours = []
+
+        for driver_num in order:
+            for driver in d:
+                if driver["driver_number"] == driver_num:
+                    drivers.append(driver["name_acronym"])
+                    colours.append(driver["team_colour"])
+
+        time.sleep(0.5)
+
+th = threading.Thread(target=fetch_data)
+th.start()
 
 while True:
-    openf1_interface.get_race_control()
-    order = openf1_interface.get_latest_positions()
-    print(order)
-    drivers = []
-    colours = []
-
-    for driver_num in order:
-        for driver in d:
-            if driver["driver_number"] == driver_num:
-                drivers.append(driver["name_acronym"])
-                colours.append(driver["team_colour"])
-
     canvas = matrix.SwapOnVSync(canvas)
     canvas.Clear()
 
@@ -175,4 +187,3 @@ while True:
         draw_border(0, 30, 0)
 
     display_drivers(drivers, colours)
-    time.sleep(0.5)
