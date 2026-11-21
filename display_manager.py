@@ -152,6 +152,10 @@ updated_drivers = []
 current_order = ["HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD", "HLD"]
 current_colours = ["FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF", "FFFFFF"]
 
+current_border = ()
+current_chequered_border = ()
+border_events = []
+
 def fetch_data():
     while True:
         openf1_interface.get_race_control()
@@ -182,17 +186,71 @@ while True:
     canvas.Clear()
 
     if openf1_interface.red_flag:
-        draw_border(0, 0, 255)
+        border_events.append({
+            "r": 255,
+            "g": 0,
+            "b": 0,
+            "chequered": False,
+            "valid_at": datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
+        })
     elif openf1_interface.chequered_flag:
-        draw_chequered_border(255, 255, 255)
+        border_events.append({
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "chequered": True,
+            "valid_at": datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
+        })
     elif openf1_interface.safety_car:
-        draw_chequered_border(247, 104, 6)
+        border_events.append({
+            "r": 247,
+            "g": 104,
+            "b": 6,
+            "chequered": True,
+            "valid_at": datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
+        })
     elif openf1_interface.virtual_safety_car:
-        draw_chequered_border(255, 255, 0)
+        border_events.append({
+            "r": 255,
+            "g": 255,
+            "b": 0,
+            "chequered": True,
+            "valid_at": datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
+        })
     elif openf1_interface.yellow_sectors or openf1_interface.double_yellow_sectors:
-        draw_border(255, 255, 0)
+        border_events.append({
+            "r": 255,
+            "g": 255,
+            "b": 0,
+            "chequered": False,
+            "valid_at": datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
+        })
     else:
-        draw_border(0, 30, 0)
+        if border_events and border_events[-1]["g"] != 30:
+            border_events.append({
+                "r": 0,
+                "g": 30,
+                "b": 0,
+                "chequered": False,
+                "valid_at": datetime.datetime.now(timezone.utc) + datetime.timedelta(seconds=delay)
+            })
+
+    new_border_events = []
+    for event in border_events:
+        if event["valid_at"] <= datetime.datetime.now(timezone.utc):
+            if event["chequered"]:
+                current_chequered_border = (event["r"], event["g"], event["b"])
+                current_border = ()
+            else:
+                current_border = (event["r"], event["g"], event["b"])
+                current_chequered_border = ()
+        else:
+            new_border_events.append(event)
+
+    border_events = new_border_events
+
+    if current_border: draw_border(current_border[0], current_border[1], current_border[2])
+    if current_chequered_border: draw_chequered_border(current_chequered_border[0], current_chequered_border[1], current_chequered_border[2])
 
     # Construct drivers array
     new_drivers = [a for a in updated_drivers]
